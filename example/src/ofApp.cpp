@@ -1,15 +1,28 @@
 #include "ofApp.h"
 
 void ofApp::setup(){
+    unit = ofxAudioUnit('aumu', 'ncut', 'TOGU');
+    unit.showUI();
+    unit.connectTo(output);
+    output.start();
 
+    midiIn.createMidiDestination("ofxAudioUnitAutomation");
+    midiIn.routeMidiTo(unit);
+    midiOut.openPort("ofxAudioUnitAutomation");
 }
 
 void ofApp::update(){
-
+    if(ofGetFrameNum() == 0) {
+        midiOut.sendNoteOn(1, 60);
+    }
 }
 
 void ofApp::draw(){
 
+}
+
+void ofApp::exit() {
+    midiOut.closePort();
 }
 
 void ofApp::keyPressed(int key){
